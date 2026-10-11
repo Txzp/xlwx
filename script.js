@@ -109,6 +109,19 @@
         })(performance.now());
     }
 
+    /* ── Count-up for hero stats ── */
+    function countUp() {
+        document.querySelectorAll('[data-count]').forEach(el => {
+            const end = parseInt(el.dataset.count, 10) || 0;
+            const t0 = performance.now(), dur = 900;
+            (function tick(t) {
+                const p = Math.min(1, (t - t0) / dur);
+                el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
+                if (p < 1) requestAnimationFrame(tick);
+            })(t0);
+        });
+    }
+
     /* ── Enter overlay ── */
     const overlay = document.getElementById('enterOverlay');
     const audio   = document.getElementById('bgAudio');
@@ -124,9 +137,12 @@
         }).catch(() => {});
     }
 
+    if (!overlay) document.body.classList.add('entered');
     if (overlay) {
         overlay.addEventListener('click', () => {
             overlay.classList.add('fade-out');
+            document.body.classList.add('entered');
+            countUp();
             tryPlayMusic();
             setTimeout(() => {
                 if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
@@ -221,8 +237,8 @@
                 const py = (e.clientY - r.top) / r.height;
                 cancelAnimationFrame(raf);
                 raf = requestAnimationFrame(() => {
-                    card.style.setProperty('--ry', ((px - 0.5) * 14).toFixed(2) + 'deg');
-                    card.style.setProperty('--rx', ((0.5 - py) * 12).toFixed(2) + 'deg');
+                    card.style.setProperty('--ry', ((px - 0.5) * 5).toFixed(2) + 'deg');
+                    card.style.setProperty('--rx', ((0.5 - py) * 4).toFixed(2) + 'deg');
                     card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
                     card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
                 });
