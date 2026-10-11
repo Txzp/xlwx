@@ -564,46 +564,59 @@ body {
     .works-grid { grid-template-columns: 1fr; }
 }
 .work-card {
+    --rx: 0deg; --ry: 0deg; --ty: 0px; --mx: 50%; --my: 0%;
     position: relative;
-    overflow: hidden;
-    min-height: 174px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.025) 70%);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-top-color: rgba(255,255,255,0.48);
-    border-radius: 18px;
-    padding: 1.25rem 1.25rem 1.05rem;
+    min-height: 168px;
+    padding: 1.3rem 1.3rem 1.1rem;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
+    transform-style: preserve-3d;
+    box-shadow: 0 22px 44px -18px rgba(0,0,0,0.85), 0 2px 8px rgba(0,0,0,0.4);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s ease;
 }
+.work-card.in-view {
+    transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(var(--ty));
+}
+.work-card.tilting {
+    transition: opacity 0.6s ease, transform 0.12s linear, box-shadow 0.4s ease;
+}
+/* The glass pane (blur lives here so the card itself can stay 3D) */
 .work-card::before {
     content: "";
     position: absolute;
-    inset: 0 auto 0 0;
-    width: 2px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.08));
-    opacity: 0.65;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,0.17) 0%, rgba(255,255,255,0.05) 38%, rgba(255,255,255,0.03) 62%, rgba(255,255,255,0.1) 100%);
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: inset 1.5px 1.5px 0 rgba(255,255,255,0.34), inset -1px -1px 0 rgba(255,255,255,0.07), inset 0 0 30px rgba(255,255,255,0.035);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
 }
+/* Specular highlight that follows the cursor */
 .work-card::after {
     content: "";
     position: absolute;
-    width: 110px;
-    height: 110px;
-    top: -55px;
-    right: -45px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    filter: blur(24px);
+    inset: 0;
+    border-radius: inherit;
     pointer-events: none;
+    transform: translateZ(1px);
+    background: radial-gradient(240px circle at var(--mx) var(--my), rgba(255,255,255,0.2), transparent 62%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
-.work-card:hover {
-    background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-5px);
-    box-shadow: 0 16px 36px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.12);
+.work-card.tilting::after { opacity: 1; }
+.work-card.in-view:hover {
+    --ty: -6px;
+    box-shadow: 0 32px 56px -16px rgba(0,0,0,0.9), 0 0 40px rgba(255,255,255,0.05);
 }
+/* Depth layers */
+.work-card .work-top   { transform: translateZ(30px); }
+.work-card .work-title { transform: translateZ(24px); text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+.work-card .work-desc  { transform: translateZ(14px); }
+.work-card .work-meta  { transform: translateZ(10px); }
 .work-top {
     display: flex;
     align-items: center;
@@ -769,15 +782,18 @@ body {
 .main-identity h1 { margin: 0; font-family: 'Orbitron', sans-serif; font-size: clamp(2.3rem, 6vw, 5rem); font-weight: 600; letter-spacing: 0.08em; color: #fff; animation: titleGlow 3.8s ease-in-out infinite; }
 .main-identity p { margin: 0.4rem 0 0; color: rgba(255,255,255,0.78); font: 500 clamp(0.75rem, 1.3vw, 1rem) 'Space Grotesk', sans-serif; letter-spacing: 0.18em; transition: color .25s, text-shadow .25s; }
 .main-identity p:hover, .main-identity p.copied { color: #fff; text-shadow: 0 0 16px rgba(255,255,255,.75); }
-.copyable { cursor: copy; user-select: text; -webkit-user-select: text; }
+.dc-link { color: inherit; text-decoration: none; cursor: pointer; }
+.dc-link:hover { text-decoration: underline; text-underline-offset: 0.35em; }
 @keyframes identityIn { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes titleGlow { 0%, 100% { text-shadow: 0 0 0 rgba(255,255,255,0); transform: translateX(0); } 50% { text-shadow: 0 0 22px rgba(255,255,255,.3); transform: translateX(3px); } }
 
-/* Large language and app cards */
-.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); gap: 0.8rem; width: min(760px, 92vw); }
-.skill-card { min-height: 136px; padding: 1.15rem 0.65rem 1rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 16px; background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025)); display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 0.7rem; transition: transform .35s ease, border-color .35s ease, background .35s ease, box-shadow .35s ease; }
-.skill-card img, .skill-card .skill-icon { width: 42px; height: 42px; object-fit: contain; font-size: 2.15rem; color: rgba(255,255,255,0.8); }
-.skill-card span { color: rgba(255,255,255,0.82); font: 600 0.72rem 'Space Grotesk', sans-serif; text-align: center; }
-.skill-card:hover { transform: translateY(-8px) scale(1.025); border-color: rgba(255,255,255,0.42); background: rgba(255,255,255,0.1); box-shadow: 0 16px 34px rgba(0,0,0,0.38), 0 0 22px rgba(255,255,255,0.06); }
+/* Skill cards — languages & apps */
+.skills-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; width: min(760px, 92vw); }
+.skill-card { --mx: 50%; --my: 0px; position: relative; width: 112px; min-height: 112px; padding: 1rem 0.6rem 0.85rem; border-radius: 18px; border: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem; background: radial-gradient(130px circle at var(--mx) var(--my), rgba(255,255,255,0.13), transparent 70%), linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 10px 24px -14px rgba(0,0,0,0.9); transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease; }
+.skill-card img, .skill-card .skill-icon { width: 46px; height: 46px; border-radius: 14px; background: #f2f2f4; box-shadow: 0 6px 16px rgba(0,0,0,0.45), inset 0 -2px 0 rgba(0,0,0,0.08); transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+.skill-card img { padding: 9px; object-fit: contain; }
+.skill-card .skill-icon { display: grid; place-items: center; font-size: 1.45rem; color: #111; }
+.skill-card span { color: rgba(255,255,255,0.86); font: 600 0.72rem 'Space Grotesk', sans-serif; text-align: center; letter-spacing: 0.01em; }
+.skill-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.34); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 18px 30px -14px rgba(0,0,0,0.9), 0 0 24px rgba(255,255,255,0.05); }
+.skill-card:hover img, .skill-card:hover .skill-icon { transform: scale(1.1) rotate(-3deg); }
 .works-empty { color: rgba(255,255,255,0.55); }
-
