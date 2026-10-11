@@ -18,6 +18,7 @@
         </div>
     </div>
     <!-- Lightning layer -->
+    <div class="bg-flow" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i></div>
     <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
     <!-- Background audio -->
@@ -82,6 +83,19 @@
                     <img class="tag-img" src="/tagdc5.png" alt="tag5" draggable="false">
                 </div>
 
+                <!-- Navigation buttons -->
+                <div class="hero-actions">
+                    <button class="hero-btn primary" onclick="scrollToSection(2)">Works</button>
+                    <button class="hero-btn" onclick="scrollToSection(1)">About Me</button>
+                </div>
+
+                <!-- Quick stats -->
+                <div class="hero-stats">
+                    <div class="stat"><b data-count="3">3</b><span>Live Projects</span></div>
+                    <div class="stat"><b>Python</b><span>Primary Lang</span></div>
+                    <div class="stat"><b>VS Code</b><span>Favorite App</span></div>
+                </div>
+
             </div>
 
             <button class="scroll-btn" onclick="scrollToSection(1)">- 𝔰𝔠𝔯𝔬𝔩𝔩 𝔣𝔬𝔯 𝔪𝔬𝔯𝔢 -</button>
@@ -96,7 +110,7 @@
                 </h2>
 
                 <p class="s2-bio scroll-reveal">
-                    I live in Virginia Beach, VA, with my three wives. I’m a fucking scripter and developer. Contact me
+                    I'm a developer who turns ideas into real projects. I build software, tools, and digital experiences with a focus on functionality, performance.
                 </p>
 
                 <div class="s2-divider scroll-reveal"></div>
@@ -140,38 +154,60 @@
             <div class="s3-content">
                 <h2 class="s3-heading scroll-reveal">Works</h2>
                 <div class="works-grid">
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fab fa-discord work-icon"></i><span class="work-badge badge-working">WORKING</span></div>
-                        <p class="work-title">Rpc-4kryx</p><p class="work-desc">Discord bot presence activities</p><p class="work-meta"><i class="fas fa-user-tag"></i> Owner</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fas fa-code work-icon"></i><span class="work-badge badge-off">OFF</span></div>
-                        <p class="work-title">VS Code | Kryhub</p><p class="work-desc">Hub modification · WindUI · advanced scripts</p><p class="work-meta"><i class="fas fa-user-tag"></i> Owner</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fas fa-terminal work-icon"></i><span class="work-badge badge-retired">RETIRED</span></div>
-                        <p class="work-title">Exploit Scripter</p><p class="work-desc">5 Scripters</p><p class="work-meta"><i class="fas fa-user-tag"></i> Programmer</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fas fa-code-branch work-icon"></i><span class="work-badge badge-retired">RETIRED</span></div>
-                        <p class="work-title">C++ | C# Project</p><p class="work-desc">Injection</p><p class="work-meta"><i class="fas fa-user-tag"></i> Co Founder</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fab fa-discord work-icon"></i><span class="work-badge badge-working">WORKING</span></div>
-                        <p class="work-title">Bots Discord Creator</p><p class="work-desc">Discord bot creator · Total bots: 3</p><p class="work-meta"><i class="fas fa-user-tag"></i> Owner</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fas fa-window-maximize work-icon"></i><span class="work-badge badge-off">OFF</span></div>
-                        <p class="work-title">Window Personalizations</p><p class="work-desc">TaskBar · 8.1k downloads on WindHawk</p><p class="work-meta"><i class="fas fa-user-tag"></i> Owner</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fas fa-file-code work-icon"></i><span class="work-badge badge-retired">RETIRED</span></div>
-                        <p class="work-title">dll & .exe</p><p class="work-desc">No Bio</p><p class="work-meta"><i class="fas fa-user-tag"></i> Owner</p>
-                    </div>
-                    <div class="work-card scroll-reveal">
-                        <div class="work-top"><i class="fas fa-shield-halved work-icon"></i><span class="work-badge badge-retired">RETIRED</span></div>
-                        <p class="work-title">Raid Discord Servers Bot</p><p class="work-desc">3 People</p><p class="work-meta"><i class="fas fa-user-tag"></i> Bot Developer</p>
-                    </div>
+                    <article class="work-card scroll-reveal">
+                        <span class="work-num">01</span>
+                        <div class="work-body">
+                            <div class="work-top"><span class="work-badge badge-live">LIVE</span><span class="work-kind">Discord Bot</span></div>
+                            <h3 class="work-title">rpc-4kryx</h3>
+                            <p class="work-desc">A Discord bot I built for 4 people who wanted to show their activity on their websites. It's hosted on Render so it never goes down.</p>
+                            <div class="work-tags"><span>Discord</span><span>Bot</span><span>Render</span></div>
+                        </div>
+                    </article>
+                    <article class="work-card scroll-reveal">
+                        <span class="work-num">02</span>
+                        <div class="work-body">
+                            <div class="work-top"><span class="work-badge badge-oss">OPEN SOURCE</span><span class="work-kind">Roblox Library</span></div>
+                            <h3 class="work-title">VS Code | Kryhub</h3>
+                            <p class="work-desc">WindUI is an open-source library used for Roblox client scripts. I started modifying several of its components and more.</p>
+                            <div class="work-tags"><span>Roblox</span><span>WindUI</span><span>Open Source</span></div>
+                        </div>
+                    </article>
+                    <article class="work-card scroll-reveal">
+                        <span class="work-num">03</span>
+                        <div class="work-body">
+                            <div class="work-top"><span class="work-badge badge-ended">DISCONTINUED</span><span class="work-kind">Roblox External</span></div>
+                            <h3 class="work-title">C++ / C# External Injector</h3>
+                            <p class="work-desc">An external I built with a team for Roblox, made for one specific game. It had Aimbot + ESP and we sold it, but the game lost its players and the project died with it.</p>
+                            <div class="work-tags"><span>C++</span><span>C#</span><span>Roblox</span><span>Team Project</span></div>
+                        </div>
+                    </article>
+                    <article class="work-card scroll-reveal">
+                        <span class="work-num">04</span>
+                        <div class="work-body">
+                            <div class="work-top"><span class="work-badge badge-live">LIVE</span><span class="work-kind">Security Tool</span></div>
+                            <h3 class="work-title">AntiMalware</h3>
+                            <p class="work-desc">A program written in Python that I built for myself and several people whose PCs were suffering from honeypot. It's still active today.</p>
+                            <div class="work-tags"><span>Python</span><span>Security</span><span>Still Active</span></div>
+                        </div>
+                    </article>
+                    <article class="work-card scroll-reveal">
+                        <span class="work-num">05</span>
+                        <div class="work-body">
+                            <div class="work-top"><span class="work-badge badge-archived">ARCHIVED</span><span class="work-kind">AI Tool</span></div>
+                            <h3 class="work-title">xZenith AI Programmer</h3>
+                            <p class="work-desc">An AI that connected to Roblox Studio projects to help with Lua coding, powered by the GPT 6 Luna model. It made 894 people happy in total.</p>
+                            <div class="work-tags"><span>Lua</span><span>AI</span><span>Roblox Studio</span></div>
+                        </div>
+                    </article>
+                    <article class="work-card scroll-reveal">
+                        <span class="work-num">06</span>
+                        <div class="work-body">
+                            <div class="work-top"><span class="work-badge badge-removed">REMOVED</span><span class="work-kind">Windhawk Mod</span></div>
+                            <h3 class="work-title">Window Personalizations</h3>
+                            <p class="work-desc">I created mods for Windhawk, including the Taskbar Personalization mod with 4 different customization modes, built with C/C++. It reached 8.1k downloads, but I removed it due to the lack of updates.</p>
+                            <div class="work-tags"><span>C/C++</span><span>Windhawk</span><span>Taskbar</span></div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
