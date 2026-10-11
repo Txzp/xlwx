@@ -8,30 +8,105 @@
 
     /* ── Default browser cursor ── */
 
-    /* ── Ambient snow background ── */
+    /* ── Lightning background: one bolt every 1.3 s, always in a new spot ── */
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas ? canvas.getContext('2d') : null;
     if (canvas && ctx) {
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        const INTERVAL = 1300;           // ms between strikes
+        const LIFE = 560;                // ms a bolt stays visible
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let W = 0, H = 0;
+        function resize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            W = window.innerWidth; H = window.innerHeight;
+            canvas.width = W * dpr; canvas.height = H * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
         resize();
         window.addEventListener('resize', resize);
-        const flakes = Array.from({ length: 150 }, () => ({
-            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-            r: Math.random() * 2 + 0.8, speed: Math.random() * 1.1 + 0.35,
-            drift: Math.random() * 0.5 - 0.25, alpha: Math.random() * 0.55 + 0.2
-        }));
-        (function snowLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            flakes.forEach(f => {
-                f.y += f.speed; f.x += f.drift;
-                if (f.y > canvas.height + 6) { f.y = -6; f.x = Math.random() * canvas.width; }
-                if (f.x < -6) f.x = canvas.width + 6;
-                if (f.x > canvas.width + 6) f.x = -6;
-                ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255,255,255,' + f.alpha + ')'; ctx.fill();
-            });
-            requestAnimationFrame(snowLoop);
-        })();
+
+        /* Jagged line by midpoint displacement */
+        function makePath(x1, y1, x2, y2, spread) {
+            let pts = [[x1, y1], [x2, y2]];
+            for (let d = spread; d > 3; d /= 2) {
+                const next = [pts[0]];
+                for (let i = 1; i < pts.length; i++) {
+                    const a = pts[i - 1], b = pts[i];
+                    next.push([
+                        (a[0] + b[0]) / 2 + (Math.random() - 0.5) * d,
+                        (a[1] + b[1]) / 2 + (Math.random() - 0.5) * d * 0.3
+                    ], b);
+                }
+                pts = next;
+            }
+            return pts;
+        }
+
+        const bolts = [];
+        let lastX = -1;
+        function strike(now) {
+            let x;
+            do { x = W * (0.08 + Math.random() * 0.84); }
+            while (lastX >= 0 && Math.abs(x - lastX) < W * 0.22);   // never the same place twice in a row
+            lastX = x;
+            const endX = x + (Math.random() - 0.5) * W * 0.12;
+            const endY = H * (0.55 + Math.random() * 0.4);
+            const main = makePath(x, -10, endX, endY, H * 0.2);
+            const branches = [];
+            const n = 2 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < n; i++) {
+                const p = main[Math.floor(main.length * (0.2 + Math.random() * 0.55))];
+                const dir = Math.random() < 0.5 ? -1 : 1;
+                const len = H * (0.12 + Math.random() * 0.22);
+                branches.push(makePath(p[0], p[1], p[0] + dir * len * (0.5 + Math.random() * 0.6), p[1] + len, len * 0.5));
+            }
+            bolts.push({ main, branches, born: now });
+        }
+
+        function stroke(pts, width, color) {
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.lineWidth = width;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+        }
+
+        let lastStrike = -INTERVAL;
+        let wasEmpty = true;
+        (function lightningLoop(now) {
+            if (now - lastStrike >= INTERVAL) { lastStrike = now; strike(now); }
+
+            if (bolts.length || !wasEmpty) {
+                ctx.clearRect(0, 0, W, H);
+                wasEmpty = bolts.length === 0;
+            }
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            for (let i = bolts.length - 1; i >= 0; i--) {
+                const b = bolts[i];
+                const age = now - b.born;
+                if (age > LIFE) { bolts.splice(i, 1); continue; }
+                let a = Math.pow(1 - age / LIFE, 1.5);
+                if (age > 110 && age < 170) a *= 0.4;        // quick flicker, like a real strike
+
+                if (!reduceMotion) {                          // soft flash of the whole sky
+                    ctx.fillStyle = 'rgba(190,210,255,' + (0.05 * a) + ')';
+                    ctx.fillRect(0, 0, W, H);
+                }
+                ctx.shadowColor = 'rgba(170,200,255,' + a + ')';
+                ctx.shadowBlur = 22;
+                stroke(b.main, 6, 'rgba(150,180,255,' + (0.22 * a) + ')');
+                stroke(b.main, 2.2, 'rgba(215,230,255,' + (0.9 * a) + ')');
+                stroke(b.main, 1, 'rgba(255,255,255,' + a + ')');
+                b.branches.forEach(br => {
+                    stroke(br, 3, 'rgba(150,180,255,' + (0.18 * a) + ')');
+                    stroke(br, 1.1, 'rgba(225,238,255,' + (0.8 * a) + ')');
+                });
+                ctx.shadowBlur = 0;
+            }
+            requestAnimationFrame(lightningLoop);
+        })(performance.now());
     }
 
     /* ── Enter overlay ── */
@@ -72,27 +147,6 @@
     if (aboutClose && aboutPanel) {
         aboutClose.addEventListener('click', () => {
             aboutPanel.classList.remove('panel-open');
-        });
-    }
-
-    /* ── Copyable Discord handle ── */
-    const copyable = document.querySelector('.copyable');
-    if (copyable) {
-        const copyHandle = () => {
-            navigator.clipboard?.writeText(copyable.dataset.copy || copyable.textContent.trim());
-            copyable.classList.add('copied');
-            copyable.textContent = 'Copied: .xl.r';
-            setTimeout(() => {
-                copyable.textContent = 'dc: .xl.r';
-                copyable.classList.remove('copied');
-            }, 1400);
-        };
-        copyable.addEventListener('click', copyHandle);
-        copyable.addEventListener('keydown', event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                copyHandle();
-            }
         });
     }
 
@@ -142,6 +196,44 @@
         }
     }
     setTimeout(devTick, 300);
+
+    /* ── Skill cards: light that follows the cursor ── */
+    document.querySelectorAll('.skills-grid').forEach(grid => {
+        grid.addEventListener('pointermove', e => {
+            const card = e.target.closest('.skill-card');
+            if (!card) return;
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+            card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        });
+    });
+
+    /* ── Work cards: 3D glass tilt ── */
+    const canTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+        && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (canTilt) {
+        document.querySelectorAll('.work-card').forEach(card => {
+            let raf = 0;
+            card.addEventListener('pointerenter', () => card.classList.add('tilting'));
+            card.addEventListener('pointermove', e => {
+                const r = card.getBoundingClientRect();
+                const px = (e.clientX - r.left) / r.width;
+                const py = (e.clientY - r.top) / r.height;
+                cancelAnimationFrame(raf);
+                raf = requestAnimationFrame(() => {
+                    card.style.setProperty('--ry', ((px - 0.5) * 14).toFixed(2) + 'deg');
+                    card.style.setProperty('--rx', ((0.5 - py) * 12).toFixed(2) + 'deg');
+                    card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+                    card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+                });
+            });
+            card.addEventListener('pointerleave', () => {
+                cancelAnimationFrame(raf);
+                card.classList.remove('tilting');
+                ['--rx', '--ry', '--mx', '--my'].forEach(p => card.style.removeProperty(p));
+            });
+        });
+    }
 
     /* ── Scroll reveal — IntersectionObserver ── */
     const revealEls = document.querySelectorAll('.scroll-reveal');
@@ -219,4 +311,3 @@ function scrollToSection(idx) {
         sections[idx].scrollIntoView({ behavior: 'smooth' });
     }
 }
-
