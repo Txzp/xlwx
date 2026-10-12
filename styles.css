@@ -627,6 +627,8 @@ body {
 .badge-oss      { color: #60a5fa; background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.36); }
 .badge-ended    { color: #fb923c; background: rgba(251,146,60,0.10); border-color: rgba(251,146,60,0.32); }
 .badge-archived { color: #9ca3af; background: rgba(156,163,175,0.10); border-color: rgba(156,163,175,0.28); }
+.badge-sold     { color: #facc15; background: rgba(250,204,21,0.10); border-color: rgba(250,204,21,0.32); }
+.badge-private  { color: #c4b5fd; background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.34); }
 .badge-removed  { color: #f87171; background: rgba(239,68,68,0.10);  border-color: rgba(239,68,68,0.30); }
 .work-kind { font: 600 0.72rem 'Space Grotesk', sans-serif; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(200,220,255,0.4); text-align: right; }
 .work-title { font: 700 1.45rem 'Space Grotesk', sans-serif; letter-spacing: -0.01em; color: #fff; }
