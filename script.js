@@ -4,41 +4,41 @@
     /* ════════════════════════════════════════════════
        CONFIG — edit your stuff here
     ════════════════════════════════════════════════ */
-    const DISCORD_ID = '1457132860216709182';
+    const DISCORD_ID = '303188562168250369';
     const TYPED_TEXT = 'developer | creator';
 
     /* Works: badge = live | ended | sold | removed. link is optional. */
     const WORKS = [
         { title: 'xZenith AI Programmer', kind: 'AI Tool', badge: 'live', label: 'Live', icon: 'fas fa-robot', featured: true,
           desc: 'An AI that connects to Roblox Studio projects to help with Lua coding, powered by the GPT 6 Luna model. It has made 894 people happy in total.',
-          tags: ['Lua', 'AI', 'Roblox Studio'], link: { url: 'https://www.xzenith.net/', text: 'Visit', icon: 'fas fa-arrow-up-right-from-square' } },
+          tags: ['Luau', 'React', 'JSON'], link: { url: 'https://www.xzenith.net/', text: 'Visit', icon: 'fas fa-arrow-up-right-from-square' } },
         { title: 'AirFlex', kind: 'Discord Bot', badge: 'live', label: 'Live', icon: 'fas fa-star',
           desc: 'Rates your Discord profile: username (2c / 4c / OG), badges and avatar, with a live preview and a final score from 0 to 10.',
-          tags: ['Discord', 'Bot', 'Profile Rating'], link: { url: 'https://www.airflex.fun/', text: 'Visit', icon: 'fas fa-arrow-up-right-from-square' } },
+          tags: ['JavaScript', 'Node.js', 'discord.js', 'Canvas'], link: { url: 'https://www.airflex.fun/', text: 'Visit', icon: 'fas fa-arrow-up-right-from-square' } },
         { title: 'AirProtect', kind: 'Discord Bot', badge: 'live', label: 'Live', icon: 'fas fa-shield-halved',
           desc: 'An all-in-one bot built to protect one specific server, 0km: anti-raid, welcome messages, boosts, commands, tickets and logs.',
-          tags: ['Anti-Raid', 'Tickets', 'Logs', 'Welcome'] },
+          tags: ['JavaScript', 'Node.js', 'discord.js'] },
         { title: 'AntiMalware', kind: 'Security Tool', badge: 'live', label: 'Live', icon: 'fas fa-bug-slash',
-          desc: 'A Python program I built for myself and several people whose PCs were suffering from honeypot. Still active today.',
-          tags: ['Python', 'Security', 'Still Active'] },
+          desc: 'A program I built for myself and several people whose PCs were suffering from honeypot. Still active today.',
+          tags: ['Python', 'Node.js', '.exe'] },
         { title: 'Window Personalizations', kind: 'Windhawk Mod', badge: 'removed', label: 'Removed', icon: 'fab fa-windows',
           desc: 'Windhawk mods built with C/C++, including Taskbar Personalization with 4 customization modes. It reached 8.1k downloads before I removed it from Windhawk; the source is still on GitHub.',
-          tags: ['C/C++', 'Windhawk', 'Taskbar'], link: { url: 'https://github.com/zk23/TaskbarWin', text: 'GitHub', icon: 'fab fa-github' } },
+          tags: ['C', 'C++'], link: { url: 'https://github.com/zk23/TaskbarWin', text: 'GitHub', icon: 'fab fa-github' } },
         { title: 'Discord Username Checker', kind: 'Discord Tool', badge: 'sold', label: 'Sold', icon: 'fas fa-terminal',
           desc: 'A command-line tool from 2024 that found available 3- and 4-letter Discord usernames. Free at first, then sold to someone who still sells it. I still have my old, outdated copy.',
-          tags: ['Discord', 'CMD', '2024'] },
-        { title: 'C++ / C# External Injector', kind: 'Roblox External', badge: 'ended', label: 'Discontinued', icon: 'fas fa-crosshairs',
+          tags: ['Python'] },
+        { title: 'External Injector', kind: 'Roblox External', badge: 'ended', label: 'Discontinued', icon: 'fas fa-crosshairs',
           desc: 'An external I built with a team for one specific Roblox game, with Aimbot + ESP. We sold it, but the game lost its players and the project died with it.',
-          tags: ['C++', 'C#', 'Roblox', 'Team Project'] },
+          tags: ['C++', 'C#'] },
         { title: 'TZexecutor', kind: 'Roblox Executor', badge: 'ended', label: 'Abandoned', icon: 'fas fa-microchip',
           desc: 'A Roblox executor built in 2023 with Cheat Engine. I planned for it to be server-side and used it against one game, then got banned. After many Roblox updates I abandoned it, but I still keep the files.',
-          tags: ['Roblox', 'Cheat Engine', '2023'] },
+          tags: ['C++', 'DLL', 'Cheat Engine'] },
         { title: 'DeepSeek Coder Jailbreak', kind: 'AI Model', badge: 'ended', label: 'Abandoned', icon: 'fas fa-brain',
           desc: 'In 2025 I took the MIT-licensed open-source version and jailbroke it for myself only. It lived on another PC, so it was left behind when I moved on from that machine.',
-          tags: ['DeepSeek Coder', 'Open Source', '2025'] },
+          tags: ['JavaScript', 'Node.js'] },
         { title: 'PKX Agent', kind: 'AI Agent', badge: 'removed', label: 'Deleted', icon: 'fas fa-bolt',
-          desc: 'My own agent built on Ollama with the qwen3.8:27b model. It helped me with debugging, but it has been deleted.',
-          tags: ['Ollama', 'Qwen', 'Debugging'] },
+          desc: 'My own agent running the qwen3.8:27b model, hosted with Ollama. It helped me with debugging, but it has been deleted.',
+          tags: ['Node.js', 'Ollama'] },
     ];
 
     const $ = (s, r = document) => r.querySelector(s);
@@ -296,27 +296,79 @@
     const bgVideo = $('#bgVideo');
     document.addEventListener('visibilitychange', () => { document.hidden ? bgVideo.pause() : bgVideo.play().catch(() => {}); });
 
-    /* ════════════════ Discord presence (Lanyard) ════════════════
-       Works once you join https://discord.gg/lanyard with your account.
-       Until then the card just shows your tag and links to your profile. */
-    (async function presence() {
-        try {
-            const r = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
-            if (!r.ok) return;
-            const { success, data } = await r.json();
-            if (!success || !data) return;
-            const u = data.discord_user || {};
-            if (u.avatar) $('#dcAvatar').src = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`;
-            $('#dcName').textContent = u.display_name || u.global_name || u.username || '.xl.r';
-            const status = data.discord_status || 'offline';
-            $('#dcDot').className = 'dc-dot ' + status;
-            const act = (data.activities || []).find(a => a.type !== 4);
-            const custom = (data.activities || []).find(a => a.type === 4);
-            $('#dcStatus').textContent = data.listening_to_spotify && data.spotify ? `listening to ${data.spotify.song}`
-                : act ? `playing ${act.name}`
-                : custom && custom.state ? custom.state
-                : status === 'offline' ? 'offline' : status === 'dnd' ? 'do not disturb' : status;
-        } catch (e) { /* keep the static card */ }
+    /* ════════════════ Discord RPC (Lanyard, live over WebSocket) ════════════════ */
+    const VERB = { 0: 'Playing', 1: 'Streaming', 2: 'Listening to', 3: 'Watching', 5: 'Competing in' };
+    const STATUS_TEXT = { online: 'online', idle: 'idle', dnd: 'do not disturb', offline: 'offline' };
+    const assetUrl = (appId, a) => {
+        if (!a) return null;
+        if (a.startsWith('mp:')) return 'https://media.discordapp.net/' + a.slice(3);
+        if (a.startsWith('spotify:')) return 'https://i.scdn.co/image/' + a.slice(8);
+        return appId ? `https://cdn.discordapp.com/app-assets/${appId}/${a}.png` : null;
+    };
+    function renderPresence(d) {
+        if (!d) return;
+        const status = d.discord_status || 'offline';
+        const dot = $('#rpcDot');
+        dot.className = 'rpc-dot ' + status;
+        dot.title = STATUS_TEXT[status] || status;
+        const u = d.discord_user || {};
+        const tag = u.primary_guild && u.primary_guild.identity_enabled && u.primary_guild.tag;
+        $('#rpcTag').hidden = !tag;
+        if (tag) $('#rpcTag').textContent = tag;
+
+        const acts = d.activities || [];
+        const act = acts.find(a => a.type !== 4);
+        const custom = acts.find(a => a.type === 4);
+        const actEl = $('#rpcAct'), detEl = $('#rpcDetail');
+        const wrap = $('#rpcArtWrap'), art = $('#rpcArt'), small = $('#rpcArtSmall');
+        let big = null, smallSrc = null;
+
+        if (d.listening_to_spotify && d.spotify) {
+            actEl.innerHTML = `<span class="rpc-verb">Listening to</span> ${esc(d.spotify.song)}`;
+            detEl.textContent = 'by ' + d.spotify.artist;
+            big = d.spotify.album_art_url;
+        } else if (act) {
+            actEl.innerHTML = `<span class="rpc-verb">${VERB[act.type] || 'Playing'}</span> ${esc(act.name)}`;
+            detEl.textContent = [act.details, act.state].filter(Boolean).join(' · ');
+            big = assetUrl(act.application_id, act.assets && act.assets.large_image);
+            smallSrc = assetUrl(act.application_id, act.assets && act.assets.small_image);
+        } else {
+            actEl.innerHTML = custom && custom.state
+                ? esc(custom.state)
+                : `<span class="rpc-verb">${esc(STATUS_TEXT[status] || status)}</span> on discord`;
+            detEl.textContent = '';
+        }
+        wrap.hidden = !big;
+        if (big) art.src = big;
+        small.hidden = !smallSrc;
+        if (smallSrc) small.src = smallSrc;
+    }
+
+    (function presence() {
+        let ws, beat;
+        const connect = () => {
+            try { ws = new WebSocket('wss://api.lanyard.rest/socket'); } catch (e) { return poll(); }
+            ws.onmessage = ev => {
+                const m = JSON.parse(ev.data);
+                if (m.op === 1) {
+                    clearInterval(beat);
+                    beat = setInterval(() => ws.readyState === 1 && ws.send('{"op":3}'), m.d.heartbeat_interval);
+                    ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
+                } else if (m.op === 0 && (m.t === 'INIT_STATE' || m.t === 'PRESENCE_UPDATE')) {
+                    renderPresence(m.d);
+                }
+            };
+            ws.onclose = () => { clearInterval(beat); setTimeout(connect, 5000); };
+        };
+        const poll = async () => {
+            try {
+                const r = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+                const j = await r.json();
+                if (j.success) renderPresence(j.data);
+            } catch (e) { /* keep the static card */ }
+        };
+        poll();
+        connect();
     })();
 
 })();
