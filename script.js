@@ -9,8 +9,8 @@
 
     /* Works: badge = live | ended | sold | removed. link is optional. */
     const WORKS = [
-        { title: 'xZenith AI Programmer', kind: 'AI Tool', badge: 'live', label: 'Live', icon: 'fas fa-robot', featured: true,
-          desc: 'An AI that connects to Roblox Studio projects to help with Lua coding, powered by the GPT 6 Luna model. It has made 894 people happy in total.',
+        { title: 'xZenith AI Programmer', kind: 'AI Tool', badge: 'down', label: 'Go Down 11/15', icon: 'fas fa-robot', featured: true,
+          desc: 'An AI that connects to Roblox Studio projects to help with Lua coding, powered by the GPT 6 Luna model. It has made 894 people happy in total. Shutting down on 11/15.',
           tags: ['Luau', 'React', 'JSON'], link: { url: 'https://www.xzenith.net/', text: 'Visit', icon: 'fas fa-arrow-up-right-from-square' } },
         { title: 'AirFlex', kind: 'Discord Bot', badge: 'live', label: 'Live', icon: 'fas fa-star',
           desc: 'Rates your Discord profile: username (2c / 4c / OG), badges and avatar, with a live preview and a final score from 0 to 10.',
@@ -18,9 +18,18 @@
         { title: 'AirProtect', kind: 'Discord Bot', badge: 'live', label: 'Live', icon: 'fas fa-shield-halved',
           desc: 'An all-in-one bot built to protect one specific server, 0km: anti-raid, welcome messages, boosts, commands, tickets and logs.',
           tags: ['JavaScript', 'Node.js', 'discord.js'] },
+        { title: 'zlarp Luxury Clip Pack', kind: 'Public App', badge: 'live', label: 'Live', icon: 'fas fa-film',
+          desc: 'A searchable library of 600+ luxury POV clips in nine categories, ready to use in your edits.',
+          tags: ['HTML5', 'CSS3', 'Tailwind CSS', 'JavaScript (ES6+)', 'TypeScript'], link: { url: 'https://zlarp.com/apps/zlarp-luxury-clip-pack', text: 'Visit', icon: 'fas fa-arrow-up-right-from-square' } },
         { title: 'AntiMalware', kind: 'Security Tool', badge: 'live', label: 'Live', icon: 'fas fa-bug-slash',
           desc: 'A program I built for myself and several people whose PCs were suffering from honeypot. Still active today.',
           tags: ['Python', 'Node.js', '.exe'] },
+        { title: 'Peakx Hub', kind: 'Browser Extension', badge: 'private', label: 'No Public', icon: 'fas fa-puzzle-piece',
+          desc: 'A Chrome / Brave extension for larp on roblox.com. It edits the real page (Robux, friends, followers, badges, avatar and items) and keeps the changes after a refresh. Visual only.',
+          tags: ['JavaScript', 'HTML', 'CSS'] },
+        { title: 'School Proxies', kind: 'Web Proxy', badge: 'patched', label: 'Patched', icon: 'fas fa-school',
+          desc: 'A mini browser made to be used on school Chromebooks, hosted on htmlhoster. A lot of people used it.',
+          tags: ['JavaScript', 'JSON'], link: { url: 'https://htmlhoster.com/p/FRB3WQ2C/public/', text: 'Open', icon: 'fas fa-arrow-up-right-from-square' } },
         { title: 'Window Personalizations', kind: 'Windhawk Mod', badge: 'removed', label: 'Removed', icon: 'fab fa-windows',
           desc: 'Windhawk mods built with C/C++, including Taskbar Personalization with 4 customization modes. It reached 8.1k downloads before I removed it from Windhawk; the source is still on GitHub.',
           tags: ['C', 'C++'], link: { url: 'https://github.com/zk23/TaskbarWin', text: 'GitHub', icon: 'fab fa-github' } },
@@ -41,19 +50,55 @@
           tags: ['Node.js', 'Ollama'] },
     ];
 
+    /* Icon for each language / tool. dev = devicon path, fa = Font Awesome class, mono = force white */
+    const DEV = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/';
+    const LANG_ICONS = {
+        'Luau': { dev: 'lua/lua-original.svg', mono: true },
+        'React': { dev: 'react/react-original.svg' },
+        'JSON': { dev: 'json/json-original.svg', mono: true },
+        'JavaScript': { dev: 'javascript/javascript-original.svg' },
+        'JavaScript (ES6+)': { dev: 'javascript/javascript-original.svg' },
+        'TypeScript': { dev: 'typescript/typescript-original.svg' },
+        'Node.js': { dev: 'nodejs/nodejs-original.svg' },
+        'discord.js': { fa: 'fab fa-discord' },
+        'Canvas': { fa: 'fas fa-palette' },
+        'Python': { dev: 'python/python-original.svg' },
+        '.exe': { fa: 'fab fa-windows' },
+        'C': { dev: 'c/c-original.svg' },
+        'C++': { dev: 'cplusplus/cplusplus-original.svg' },
+        'C#': { dev: 'csharp/csharp-original.svg' },
+        'DLL': { fa: 'fas fa-puzzle-piece' },
+        'Cheat Engine': { fa: 'fas fa-gears' },
+        'Ollama': { fa: 'fas fa-robot' },
+        'HTML': { dev: 'html5/html5-original.svg' },
+        'HTML5': { dev: 'html5/html5-original.svg' },
+        'CSS': { dev: 'css3/css3-original.svg' },
+        'CSS3': { dev: 'css3/css3-original.svg' },
+        'Tailwind CSS': { dev: 'tailwindcss/tailwindcss-original.svg' },
+    };
+    const MAX_TAGS = 3;
+
     const $ = (s, r = document) => r.querySelector(s);
     const $$ = (s, r = document) => [...r.querySelectorAll(s)];
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
     /* ════════════════ Works render ════════════════ */
+    const langChip = t => {
+        const ic = LANG_ICONS[t];
+        const icon = !ic ? '' : ic.dev ? `<img src="${DEV + ic.dev}" alt=""${ic.mono ? ' class="mono"' : ''} loading="lazy">` : `<i class="${ic.fa}"></i>`;
+        return `<span>${icon}${esc(t)}</span>`;
+    };
     const grid = $('#worksGrid');
     if (grid) {
-        grid.innerHTML = WORKS.map(w => `
+        grid.innerHTML = WORKS.map((w, i) => {
+            const shown = w.tags.length > MAX_TAGS ? w.tags.slice(0, MAX_TAGS - 1) : w.tags;
+            const more = w.tags.length > MAX_TAGS ? `<button class="more" data-work="${i}" aria-label="Show all languages">More...</button>` : '';
+            return `
             <article class="work glass reveal${w.featured ? ' featured' : ''}">
                 <div class="pattern" aria-hidden="true">${`<i class="${w.icon}"></i>`.repeat(48)}</div>
                 <div class="work-head">
-                    <div class="work-tags">${w.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>
+                    <div class="work-tags">${shown.map(langChip).join('')}${more}</div>
                     <span class="badge ${w.badge}">${esc(w.label)}</span>
                 </div>
                 <div class="work-foot">
@@ -64,7 +109,26 @@
                     </div>
                     ${w.link ? `<a class="work-link" href="${esc(w.link.url)}" target="_blank" rel="noopener noreferrer"><i class="${w.link.icon}"></i>${esc(w.link.text)}</a>` : ''}
                 </div>
-            </article>`).join('');
+            </article>`;
+        }).join('');
+
+        /* "More..." → popup with every language */
+        const modal = $('#langModal');
+        let lastFocus = null;
+        const closeLang = () => { modal.classList.remove('open'); lastFocus && lastFocus.focus(); };
+        grid.addEventListener('click', e => {
+            const btn = e.target.closest('.more');
+            if (!btn) return;
+            const w = WORKS[+btn.dataset.work];
+            $('#langTitle').textContent = w.title;
+            $('#langList').innerHTML = w.tags.map(langChip).join('');
+            lastFocus = btn;
+            modal.classList.add('open');
+            $('#langClose').focus();
+        });
+        $('#langClose').addEventListener('click', closeLang);
+        modal.addEventListener('click', e => { if (e.target === modal) closeLang(); });
+        addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeLang(); });
 
         if (matchMedia('(hover: hover)').matches) {
             grid.addEventListener('pointermove', e => {
@@ -76,6 +140,13 @@
             });
         }
     }
+
+    /* Stats come from the WORKS list, so they stay right when you add projects */
+    const liveCount = WORKS.filter(w => w.badge === 'live').length;
+    [['#statProjects', WORKS.length], ['#statLive', liveCount], ['#cornerLive', liveCount]].forEach(([sel, n]) => {
+        const el = $(sel);
+        if (el) { el.dataset.count = n; el.textContent = n; }
+    });
 
     /* ════════════════ Lightning ════════════════ */
     const canvas = $('#bgCanvas');
@@ -305,6 +376,31 @@
         if (a.startsWith('spotify:')) return 'https://i.scdn.co/image/' + a.slice(8);
         return appId ? `https://cdn.discordapp.com/app-assets/${appId}/${a}.png` : null;
     };
+    /* Discord profile badges (from public_flags) */
+    const BADGE_ICON = id => `https://cdn.discordapp.com/badge-icons/${id}.png`;
+    const BADGES = [
+        [1 << 0, 'Discord Staff', '5e74e9b61934fc1f67c65515d1f7e60d'],
+        [1 << 1, 'Partnered Server Owner', '3f9748e53446a137a052f3454e2de41e'],
+        [1 << 2, 'HypeSquad Events', 'bf01d1073931f921909045f3a39fd264'],
+        [1 << 3, 'Bug Hunter', '2717692c7dca7289b35297368a940dd0'],
+        [1 << 6, 'HypeSquad Bravery', '8a88d63823d8a71cd5e390baa45efa02'],
+        [1 << 7, 'HypeSquad Brilliance', '011940fd013da3f7fb926e4a1cd2e618'],
+        [1 << 8, 'HypeSquad Balance', '3aa41de486fa12454c3761e8e223442e'],
+        [1 << 9, 'Early Supporter', '7060786766c9c840eb3019e725d2b358'],
+        [1 << 14, 'Bug Hunter Gold', '848f79194d4be5ff5f81505cbd0ce1e6'],
+        [1 << 17, 'Early Verified Bot Developer', '6df5892e0f35b051f8b61eace34f4967'],
+        [1 << 18, 'Moderator Programs Alumni', 'fee1624003e2fee35cb398e125dc479b'],
+        [1 << 22, 'Active Developer', '6bdc42827a38498929a4920da12695d9'],
+    ];
+    const NITRO = ['Nitro', '2ba85e8026a8614b640c2837bcdfe21b'];
+    function renderBadges(u) {
+        const flags = u.public_flags || 0;
+        const list = BADGES.filter(([bit]) => flags & bit).map(([, name, id]) => [name, id]);
+        /* Discord doesn't expose Nitro publicly; name styles / animated avatar are Nitro-only perks */
+        if (u.display_name_styles || (u.avatar && u.avatar.startsWith('a_'))) list.unshift(NITRO);
+        $('#rpcBadges').innerHTML = list.map(([name, id]) => `<img src="${BADGE_ICON(id)}" alt="${esc(name)}" title="${esc(name)}" loading="lazy">`).join('');
+    }
+
     function renderPresence(d) {
         if (!d) return;
         const status = d.discord_status || 'offline';
@@ -312,9 +408,7 @@
         dot.className = 'rpc-dot ' + status;
         dot.title = STATUS_TEXT[status] || status;
         const u = d.discord_user || {};
-        const tag = u.primary_guild && u.primary_guild.identity_enabled && u.primary_guild.tag;
-        $('#rpcTag').hidden = !tag;
-        if (tag) $('#rpcTag').textContent = tag;
+        renderBadges(u);
 
         const acts = d.activities || [];
         const act = acts.find(a => a.type !== 4);

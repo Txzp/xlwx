@@ -10,6 +10,7 @@
     <meta property="og:image" content="/avatar.jpg">
     <meta name="theme-color" content="#18181b">
     <link rel="icon" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -25,7 +26,7 @@
     <canvas id="bgCanvas" aria-hidden="true"></canvas>
     <div class="grain" aria-hidden="true"></div>
 
-    <audio id="bgAudio" loop preload="none" src="/bg.mp3"></audio>
+    <audio id="bgAudio" loop preload="none" src="/music.m4a"></audio>
 
     <!-- ═══ Enter screen ═══ -->
     <div id="enterOverlay" role="button" tabindex="0" aria-label="Click to enter">
@@ -51,7 +52,7 @@
     <div class="corner-bl">
         <a href="https://discord.com/users/303188562168250369" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> k940</a>
         <span class="sep">|</span>
-        <span><i class="fas fa-bolt"></i> <b data-count="4">4</b> live projects</span>
+        <span><i class="fas fa-bolt"></i> <b data-count="4" id="cornerLive">4</b> live projects</span>
     </div>
 
     <!-- About this website -->
@@ -68,14 +69,14 @@
         <!-- ═══ 1 — HOME ═══ -->
         <section class="section hero" id="home">
             <div class="hero-card">
-                <a class="rpc glass" id="rpc" href="https://discord.com/users/303188562168250369" target="_blank" rel="noopener noreferrer" aria-label="angel on Discord">
+                <a class="rpc" id="rpc" href="https://discord.com/users/303188562168250369" target="_blank" rel="noopener noreferrer" aria-label="angel on Discord">
                     <div class="rpc-avatar">
                         <img src="/avatar.jpg" alt="angel" draggable="false">
                         <span class="rpc-dot" id="rpcDot" title="offline"></span>
                     </div>
                     <div class="rpc-info">
                         <h1 class="rpc-name serif">angel</h1>
-                        <p class="rpc-user">@k940 <span class="rpc-tag" id="rpcTag" hidden></span></p>
+                        <p class="rpc-user">@k940 <span class="rpc-badges" id="rpcBadges"></span></p>
                         <p class="rpc-act" id="rpcAct"><span class="rpc-verb">on</span> discord</p>
                         <p class="rpc-detail" id="rpcDetail"></p>
                     </div>
@@ -99,7 +100,7 @@
         <section class="section" id="music">
             <div class="player glass reveal">
                 <div class="player-top">
-                    <div class="cover"><video src="/bg.mp4" poster="/bg-poster.jpg" muted loop playsinline autoplay preload="metadata"></video></div>
+                    <div class="cover"><video src="/cover.mp4" muted loop playsinline autoplay preload="metadata"></video></div>
                     <div class="track">
                         <p class="track-name serif">The Days (NOTION Remix) — Slowed</p>
                         <p class="track-artist">Chrystal, NOTION</p>
@@ -132,8 +133,8 @@
                 </div>
 
                 <div class="glass stat-card reveal">
-                    <div class="stat"><b data-count="10">10</b><span>projects</span></div>
-                    <div class="stat"><b data-count="4">4</b><span>live</span></div>
+                    <div class="stat"><b data-count="13" id="statProjects">13</b><span>projects</span></div>
+                    <div class="stat"><b data-count="4" id="statLive">4</b><span>live</span></div>
                     <div class="stat"><b>8.1k</b><span>downloads</span></div>
                 </div>
 
@@ -174,6 +175,16 @@
         </section>
 
     </main>
+
+    <!-- Languages popup (opened by "More...") -->
+    <div id="langModal" class="lang-modal" role="dialog" aria-modal="true" aria-labelledby="langTitle">
+        <div class="lang-card glass">
+            <button class="icon-btn lang-close" id="langClose" aria-label="Close"><i class="fas fa-xmark"></i></button>
+            <p class="lang-kicker">languages used in</p>
+            <h3 class="lang-title serif" id="langTitle"></h3>
+            <div class="lang-list" id="langList"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
