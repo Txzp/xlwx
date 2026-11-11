@@ -4,251 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>wwwww</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Space+Grotesk:wght@300;400;500;600&family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="wwwww — developer | creator. Discord bots, AI tools, security tools and more.">
+    <meta property="og:title" content="wwwww">
+    <meta property="og:description" content="developer | creator — Discord bots, AI tools, security tools and more.">
+    <meta property="og:image" content="/mask.png">
+    <meta name="theme-color" content="#18181b">
+    <link rel="icon" href="/mask.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- Enter overlay -->
-    <div id="enterOverlay">
-        <div id="enterContent">
-            <p class="enter-title"><span class="enter-name">wwwww</span></p>
-            <p class="enter-sub">Click to enter</p>
-        </div>
+    <!-- ═══ Background: gray video + lightning + grain ═══ -->
+    <div class="bg" aria-hidden="true">
+        <video class="bg-video" id="bgVideo" src="/bg.mp4" poster="/bg-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+        <div class="bg-shade"></div>
     </div>
-    <!-- Lightning layer -->
-    <div class="bg-flow" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i></div>
     <canvas id="bgCanvas" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
 
-    <!-- Background audio -->
-    <audio id="bgAudio" loop preload="auto">
-        <source src="/bg.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgAudio" loop preload="none" src="/bg.mp3"></audio>
 
-    <!-- Scroll navigation dots -->
-    <div class="scroll-dots" id="scrollDots">
-        <div class="scroll-dot active" data-section="0"></div>
-        <div class="scroll-dot" data-section="1"></div>
-        <div class="scroll-dot" data-section="2"></div>
-    </div>
-
-    <!-- Music toggle -->
-    <div class="music-toggle" id="musicToggle" title="Toggle music">
-        <i class="fas fa-volume-high" id="musicIcon"></i>
-    </div>
-
-    <!-- About button -->
-    <div class="about-btn" id="aboutBtn" title="About">
-        <i class="fas fa-question"></i>
-    </div>
-
-    <!-- About panel -->
-    <div id="aboutPanel" class="about-panel">
-        <button id="aboutClose" class="about-close-btn" title="Close">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="about-inner">
-            <h2 class="about-heading">
-                About This Website
-            </h2>
-            <p class="about-text">
-                This website was built with <span class="about-hi">Visual Studio Code</span>,
-                using <span class="about-hi">GitHub</span> for version control
-                and deployed via <span class="about-hi">Vercel.app</span>.
-                A dark aesthetic profile page made for creators.
-            </p>
+    <!-- ═══ Enter screen ═══ -->
+    <div id="enterOverlay" role="button" tabindex="0" aria-label="Click to enter">
+        <div class="enter-inner">
+            <div class="enter-avatar"><img src="/mask.png" alt="" draggable="false"></div>
+            <p class="enter-sub">click to enter<span class="dots">...</span></p>
         </div>
     </div>
 
-    <!-- Main scrollable wrapper -->
-    <div class="site-wrapper" id="siteWrapper">
+    <!-- ═══ Fixed UI ═══ -->
+    <div class="corner-tl">
+        <button class="icon-btn" id="musicToggle" aria-label="Toggle music"><i class="fas fa-volume-high" id="musicIcon"></i></button>
+        <button class="icon-btn" id="aboutBtn" aria-label="About this website"><i class="fas fa-question"></i></button>
+    </div>
 
-        <!-- ═══ SECTION 1 — Hero ═══ -->
-        <section class="section" id="section1">
-            <div class="hero-content">
+    <nav class="scroll-dots" id="scrollDots" aria-label="Sections">
+        <button class="scroll-dot active" data-section="0" aria-label="Home"></button>
+        <button class="scroll-dot" data-section="1" aria-label="Music"></button>
+        <button class="scroll-dot" data-section="2" aria-label="About me"></button>
+        <button class="scroll-dot" data-section="3" aria-label="Works"></button>
+    </nav>
 
-                <!-- Title at top — typewriter -->
-                <div class="main-identity scroll-reveal">
-                    <h1>wwwww</h1>
-                    <p><a class="dc-link" href="https://discord.com/users/1457132860216709182" target="_blank" rel="noopener noreferrer" title="Open my Discord profile">dc: .xl.r</a></p>
+    <div class="corner-bl">
+        <a href="https://discord.com/users/1457132860216709182" target="_blank" rel="noopener noreferrer"><i class="fab fa-discord"></i> .xl.r</a>
+        <span class="sep">|</span>
+        <span><i class="fas fa-bolt"></i> <b data-count="4">4</b> live projects</span>
+    </div>
+
+    <!-- About this website -->
+    <div id="aboutPanel" class="about-panel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+        <div class="about-card glass">
+            <button id="aboutClose" class="icon-btn about-close" aria-label="Close"><i class="fas fa-xmark"></i></button>
+            <h2 id="aboutTitle" class="serif">about this website</h2>
+            <p>Built with <b>Visual Studio Code</b>, versioned on <b>GitHub</b> and deployed on <b>Vercel</b>. A dark, gray profile page made for creators.</p>
+        </div>
+    </div>
+
+    <main class="site" id="siteWrapper">
+
+        <!-- ═══ 1 — HOME ═══ -->
+        <section class="section hero" id="home">
+            <div class="hero-card">
+                <div class="avatar">
+                    <svg class="aura" viewBox="0 0 200 200" aria-hidden="true">
+                        <defs>
+                            <filter id="auraBlur"><feGaussianBlur stdDeviation="2.2"/></filter>
+                            <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4"><animate attributeName="seed" values="1;30;1" dur="9s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="22"/></filter>
+                        </defs>
+                        <g filter="url(#wobble)">
+                            <rect x="22" y="22" width="156" height="156" rx="38" fill="none" stroke="rgba(235,235,245,.85)" stroke-width="2.4" filter="url(#auraBlur)"/>
+                            <rect x="16" y="16" width="168" height="168" rx="44" fill="none" stroke="rgba(200,200,215,.45)" stroke-width="1.4"/>
+                        </g>
+                    </svg>
+                    <div class="avatar-tile"><img src="/mask.png" alt="wwwww avatar" draggable="false"></div>
                 </div>
 
-                <!-- Navigation buttons -->
-                <div class="hero-actions">
-                    <button class="hero-btn primary" onclick="scrollToSection(2)">Works</button>
-                    <button class="hero-btn" onclick="scrollToSection(1)">About Me</button>
+                <div class="identity">
+                    <h1 class="name serif">wwwww <a class="name-badge" href="https://discord.com/users/1457132860216709182" target="_blank" rel="noopener noreferrer" title="Open my Discord profile" aria-label="Discord profile"><i class="fab fa-discord"></i></a></h1>
+                    <p class="typed"><span id="devTyped"></span><span class="caret">|</span></p>
+                    <div class="hero-pills">
+                        <span class="pill"><i class="fab fa-python"></i> Python</span>
+                        <span class="pill"><i class="fas fa-code"></i> VS Code</span>
+                        <span class="pill"><i class="fab fa-discord"></i> Discord bots</span>
+                        <span class="pill"><i class="fas fa-shield-halved"></i> Security</span>
+                        <span class="pill"><i class="fas fa-robot"></i> AI tools</span>
+                    </div>
                 </div>
-
-                <!-- Quick stats -->
-                <div class="hero-stats">
-                    <div class="stat"><b data-count="4">4</b><span>Live Projects</span></div>
-                    <div class="stat"><b>Python</b><span>Primary Lang</span></div>
-                    <div class="stat"><b>VS Code</b><span>Favorite App</span></div>
-                </div>
-
             </div>
-
-            <button class="scroll-btn" onclick="scrollToSection(1)">- 𝔰𝔠𝔯𝔬𝔩𝔩 𝔣𝔬𝔯 𝔪𝔬𝔯𝔢 -</button>
+            <button class="scroll-more" data-go="1">Scroll for more<i class="fas fa-arrow-down"></i></button>
         </section>
 
-        <!-- ═══ SECTION 2 — About & Skills ═══ -->
-        <section class="section" id="section2">
-            <div class="s2-content">
-
-                <h2 class="s2-main-heading scroll-reveal">
-                    About Me
-                </h2>
-
-                <p class="s2-bio scroll-reveal">
-                    I'm a developer who turns ideas into real projects. I build software, tools, and digital experiences with a focus on functionality, performance.
-                </p>
-
-                <div class="s2-divider scroll-reveal"></div>
-
-                <div class="skill-head scroll-reveal"><h3 class="s2-heading">Languages</h3><span class="skill-count">9</span></div>
-                <div class="skills-grid scroll-reveal">
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">TypeScript</span><span class="skill-sub">Typed JS</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">JavaScript</span><span class="skill-sub">Web & bots</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="C#" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">C#</span><span class="skill-sub">Desktop & tools</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">Python</span><span class="skill-sub">Primary</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="C++" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">C++</span><span class="skill-sub">78%</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/json/json-original.svg" alt="JSON" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">JSON</span><span class="skill-sub">Data & config</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">HTML</span><span class="skill-sub">Markup</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">Node.js</span><span class="skill-sub">Runtime</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="CSS" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">CSS</span><span class="skill-sub">Styling</span></div></div>
+        <!-- ═══ 2 — MUSIC ═══ -->
+        <section class="section" id="music">
+            <div class="player glass reveal">
+                <div class="player-top">
+                    <div class="cover"><video src="/bg.mp4" poster="/bg-poster.jpg" muted loop playsinline autoplay preload="metadata"></video></div>
+                    <div class="track">
+                        <p class="track-name serif">now playing</p>
+                        <div class="progress-row">
+                            <span id="tCur">0:00</span>
+                            <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Seek">
+                            <span id="tDur">0:00</span>
+                        </div>
+                    </div>
+                    <div class="controls">
+                        <button class="ctrl" id="prevBtn" aria-label="Restart"><i class="fas fa-backward-step"></i></button>
+                        <button class="ctrl big" id="playBtn" aria-label="Play"><i class="fas fa-play" id="playIcon"></i></button>
+                        <button class="ctrl" id="nextBtn" aria-label="Skip 10 seconds"><i class="fas fa-forward-step"></i></button>
+                    </div>
                 </div>
-
-                <div class="skill-head scroll-reveal"><h3 class="s2-heading">Apps</h3><span class="skill-count">8</span></div>
-                <div class="skills-grid scroll-reveal">
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" alt="VS Code" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">VS Code</span><span class="skill-sub">Favorite</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><i class="fas fa-server skill-icon"></i></div><div class="skill-txt"><span class="skill-name">Railway</span><span class="skill-sub">Hosting</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">GitHub</span><span class="skill-sub">Version control</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><i class="fab fa-discord skill-icon"></i></div><div class="skill-txt"><span class="skill-name">BetterDiscord</span><span class="skill-sub">Plugins & themes</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jetbrains/jetbrains-original.svg" alt="JetBrains Rider" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">JetBrains Rider</span><span class="skill-sub">.NET IDE</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><i class="fas fa-code skill-icon"></i></div><div class="skill-txt"><span class="skill-name">Dev-C++</span><span class="skill-sub">C/C++ IDE</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pycharm/pycharm-original.svg" alt="PyCharm" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">PyCharm</span><span class="skill-sub">Python IDE</span></div></div>
-                    <div class="skill-card"><div class="skill-ico"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/intellij/intellij-original.svg" alt="IntelliJ IDEA" draggable="false" loading="lazy"></div><div class="skill-txt"><span class="skill-name">IntelliJ IDEA</span><span class="skill-sub">Java IDE</span></div></div>
-                </div>
-
+                <canvas id="viz" aria-hidden="true"></canvas>
+                <p class="player-quote serif"><i>turning ideas into real projects</i></p>
             </div>
-
-            <button class="scroll-btn" onclick="scrollToSection(2)">- 𝔰𝔠𝔯𝔬𝔩𝔩 𝔣𝔬𝔯 𝔪𝔬𝔯𝔢 -</button>
+            <button class="scroll-more" data-go="2">Scroll for more<i class="fas fa-arrow-down"></i></button>
         </section>
 
-        <!-- ═══ SECTION 3 — Works ═══ -->
-        <section class="section" id="section3">
-            <div class="s3-content">
-                <h2 class="s3-heading scroll-reveal">Works</h2>
-                <div class="works-grid">
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">01</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-live">LIVE</span><span class="work-kind">AI Tool</span></div>
-                            <h3 class="work-title">xZenith AI Programmer</h3>
-                            <p class="work-desc">An AI that connects to Roblox Studio projects to help with Lua coding, powered by the GPT 6 Luna model. It has made 894 people happy in total.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Lua</span><span>AI</span><span>Roblox Studio</span></div>
-                            <a class="work-link" href="https://www.xzenith.net/" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> Visit site</a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">02</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-live">LIVE</span><span class="work-kind">Discord Bot</span></div>
-                            <h3 class="work-title">AirFlex</h3>
-                            <p class="work-desc">A Discord bot that rates your profile: username (2c / 4c / OG), badges and avatar, with a live preview and a final score from 0 to 10.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Discord</span><span>Bot</span><span>Profile Rating</span></div>
-                            <a class="work-link" href="https://www.airflex.fun/" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i> Visit site</a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">03</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-live">LIVE</span><span class="work-kind">Discord Bot</span></div>
-                            <h3 class="work-title">AirProtect</h3>
-                            <p class="work-desc">An all-in-one bot built to protect one specific server, 0km. It handles anti-raid, welcome messages, boosts, commands, tickets and logs.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Anti-Raid</span><span>Tickets</span><span>Logs</span><span>Welcome</span></div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">04</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-live">LIVE</span><span class="work-kind">Security Tool</span></div>
-                            <h3 class="work-title">AntiMalware</h3>
-                            <p class="work-desc">A program written in Python that I built for myself and several people whose PCs were suffering from honeypot. It's still active today.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Python</span><span>Security</span><span>Still Active</span></div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">05</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-removed">REMOVED</span><span class="work-kind">Windhawk Mod</span></div>
-                            <h3 class="work-title">Window Personalizations</h3>
-                            <p class="work-desc">I created mods for Windhawk, including the Taskbar Personalization mod with 4 different customization modes, built with C/C++. It reached 8.1k downloads before I removed it from Windhawk, but the source is still on GitHub.</p>
-                            <div class="work-foot"><div class="work-tags"><span>C/C++</span><span>Windhawk</span><span>Taskbar</span></div>
-                            <a class="work-link" href="https://github.com/zk23/TaskbarWin" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">06</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-sold">SOLD</span><span class="work-kind">Discord Tool</span></div>
-                            <h3 class="work-title">Discord Username Checker</h3>
-                            <p class="work-desc">A command-line tool I built in 2024 to find available 3- and 4-letter Discord usernames. It was free at the time, but I ended up selling it to someone who still sells it today. I still have my old copy, though it's outdated.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Discord</span><span>CMD</span><span>2024</span></div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">07</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-ended">DISCONTINUED</span><span class="work-kind">Roblox External</span></div>
-                            <h3 class="work-title">C++ / C# External Injector</h3>
-                            <p class="work-desc">An external I built with a team for Roblox, made for one specific game. It had Aimbot + ESP and we sold it, but the game lost its players and the project died with it.</p>
-                            <div class="work-foot"><div class="work-tags"><span>C++</span><span>C#</span><span>Roblox</span><span>Team Project</span></div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">08</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-ended">ABANDONED</span><span class="work-kind">Roblox Executor</span></div>
-                            <h3 class="work-title">TZexecutor</h3>
-                            <p class="work-desc">A Roblox executor I built in 2023 using Cheat Engine. I planned for it to be server-side and managed to use it against one game, but I ended up banned from Roblox. After many Roblox updates, I abandoned it, though I still keep the files.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Roblox</span><span>Cheat Engine</span><span>2023</span></div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">09</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-ended">ABANDONED</span><span class="work-kind">AI Model</span></div>
-                            <h3 class="work-title">DeepSeek Coder Jailbreak</h3>
-                            <p class="work-desc">In 2025 I got the open-source version under the MIT License and jailbroke it for myself only. It lived on another PC, so when I moved on from that machine the project was left behind.</p>
-                            <div class="work-foot"><div class="work-tags"><span>DeepSeek Coder</span><span>Open Source</span><span>2025</span></div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="work-card scroll-reveal">
-                        <span class="work-num">10</span>
-                        <div class="work-body">
-                            <div class="work-top"><span class="work-badge badge-removed">DELETED</span><span class="work-kind">AI Agent</span></div>
-                            <h3 class="work-title">PKX Agent</h3>
-                            <p class="work-desc">PKX was my own agent, built on Ollama and running the qwen3.8:27b model. It helped me with debugging, but it's been deleted.</p>
-                            <div class="work-foot"><div class="work-tags"><span>Ollama</span><span>Qwen</span><span>Debugging</span></div>
-                            </div>
-                        </div>
-                    </article>
+        <!-- ═══ 3 — ABOUT ME ═══ -->
+        <section class="section" id="about">
+            <div class="col">
+                <h2 class="sec-title serif reveal">about me</h2>
+                <div class="glass bio reveal">
+                    <p>hi, i'm <i>wwwww</i> — a developer who turns ideas into real projects.</p>
+                    <p>i build software, tools and digital experiences with a focus on <b>functionality</b> and <b>performance</b>.</p>
+                    <p>mostly <b>discord bots</b>, <b>ai tools</b> and <b>security</b> stuff.</p>
                 </div>
+
+                <div class="duo reveal">
+                    <a class="glass dc-card" id="dcCard" href="https://discord.com/users/1457132860216709182" target="_blank" rel="noopener noreferrer">
+                        <div class="dc-avatar"><img id="dcAvatar" src="/mask.png" alt=""><span class="dc-dot" id="dcDot"></span></div>
+                        <div class="dc-info">
+                            <p class="dc-name serif" id="dcName">.xl.r</p>
+                            <p class="dc-status" id="dcStatus">add me on discord</p>
+                        </div>
+                        <i class="fab fa-discord dc-logo"></i>
+                    </a>
+                    <div class="glass stat-card">
+                        <div class="stat"><b data-count="10">10</b><span>projects</span></div>
+                        <div class="stat"><b data-count="4">4</b><span>live</span></div>
+                        <div class="stat"><b>8.1k</b><span>downloads</span></div>
+                    </div>
+                </div>
+
+                <p class="mini-title reveal">languages</p>
+                <div class="pills reveal">
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="">Python</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="">TypeScript</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="">JavaScript</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="">C#</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="">C++ <em>78%</em></span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="">Node.js</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="">HTML</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="">CSS</span>
+                    <span class="pill"><img class="mono" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/json/json-original.svg" alt="">JSON</span>
+                </div>
+
+                <p class="mini-title reveal">apps</p>
+                <div class="pills reveal">
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" alt="">VS Code</span>
+                    <span class="pill"><img class="mono" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="">GitHub</span>
+                    <span class="pill"><i class="fas fa-train"></i>Railway</span>
+                    <span class="pill"><i class="fab fa-discord"></i>BetterDiscord</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pycharm/pycharm-original.svg" alt="">PyCharm</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/intellij/intellij-original.svg" alt="">IntelliJ IDEA</span>
+                    <span class="pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jetbrains/jetbrains-original.svg" alt="">Rider</span>
+                    <span class="pill"><i class="fas fa-code"></i>Dev-C++</span>
+                </div>
+            </div>
+            <button class="scroll-more" data-go="3">Scroll for more<i class="fas fa-arrow-down"></i></button>
+        </section>
+
+        <!-- ═══ 4 — WORKS ═══ -->
+        <section class="section works-sec" id="works">
+            <div class="col wide">
+                <h2 class="sec-title serif reveal">projects i work on</h2>
+                <div class="works" id="worksGrid"></div>
             </div>
         </section>
 
-    </div><!-- /site-wrapper -->
+    </main>
 
     <script src="script.js"></script>
 </body>
